@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-
 //need data from messages
 class Message extends Component {
   render() {
