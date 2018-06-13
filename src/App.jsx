@@ -33,6 +33,12 @@ class App extends Component {
     this.addMessage = this.addMessage.bind(this);
   }
 
+
+  //send messages as strings
+  // myWebSocket.onopen = function (event) {
+  //   myWebSocket.send("Here's some text that the server is urgently awaiting!");
+  // };
+
   componentDidMount() {
     console.log("componentDidMount <App />");
     setTimeout(() => {
@@ -44,6 +50,11 @@ class App extends Component {
       // Calling setState will trigger a call to render() in App and all child components.
       this.setState({messages: messages})
     }, 3000);
+    //websocket connection object
+    this.myWebSocket = new WebSocket("ws:localhost:3001");
+
+
+    console.log('Connected to server');
   }
 
   addMessage = (incomingMessage) => {
@@ -69,9 +80,7 @@ class App extends Component {
        </main>
 
        {/*footer*/}
-       <ChatBar name={this.state.currentUser.name}
-        addMessage={this.addMessage} />
-
+       <ChatBar name={this.state.currentUser.name} addMessage={this.addMessage} />
 
        {/*<footer class="chatbar">
           <input class="chatbar-username" placeholder="Your Name (Optional)" />
@@ -84,3 +93,7 @@ class App extends Component {
 }
 
 export default App;
+
+//You will have to store the socket
+// connection object somewhere. One way to do this is to store the object
+// as this.socket in the App component.
