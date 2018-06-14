@@ -10,25 +10,7 @@ class App extends Component {
     super();
     this.state = {
       currentUser: {name: "Bob"},
-      messages: [
-        {
-          id: 1,
-          type: "incomingMessage",
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-        {
-          id: 2,
-          type: "incomingMessage",
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        },
-        {
-          id: 3,
-          type: "incomingNotification",
-          content: "Anonymous changed their name to nomnom",
-        }
-      ]
+      messages: [] // messages coming from the server will be stored here as they arrive
     };
     this.addMessage = this.addMessage.bind(this);
   }
@@ -48,8 +30,14 @@ class App extends Component {
 
     //websocket connection object
     this.myWebSocket = new WebSocket("ws:localhost:3001");
-
     console.log('Connected to server');
+
+    //Receiving messages from the server
+    this.myWebSocket.onmessage = (event) => {
+      console.log(event.data)
+      var msg = JSON.parse(event.data);
+       this.addMessage(msg);
+    }
   }
 
   addMessage = (incomingMessage) => {
@@ -60,7 +48,7 @@ class App extends Component {
 
   //this function sends the message that the user types in to the server
   sendMessage = (message) => {
-    console.log('messageObject', message)
+    //console.log('messageObject', message)
     // Send the msg object as a JSON-formatted string.
     this.myWebSocket.send(JSON.stringify(message));
 
@@ -73,22 +61,12 @@ class App extends Component {
        <nav className="navbar"><a href="/" className="navbar-brand">Chatty</a></nav>
        <main className="messages">
           <MessageList messages={this.state.messages}/>
-         {/*<div className="message">
-           <span className="message-username">Anonymous1</span>
-           <span className="message-content">I won't be impressed with technology until I can download food.</span>
-         </div>*/}
          <div className="message system">
           Anonymous1 changed their name to nomnom.
          </div>
        </main>
 
-       {/*footer*/}
-       <ChatBar name={this.state.currentUser.name} addMessage={this.sendMessage} />
-
-       {/*<footer class="chatbar">
-          <input class="chatbar-username" placeholder="Your Name (Optional)" />
-          <input class="chatbar-message" placeholder="Type a message and hit ENTER" />
-        </footer> */}
+       <ChatBar name={this.state.currentUser.name} sendMessage={this.sendMessage} />
 
       </div>
     );
@@ -96,4 +74,8 @@ class App extends Component {
 }
 
 export default App;
+
+
+//need to use the message uuid for the key inside of messagelist component
+
 

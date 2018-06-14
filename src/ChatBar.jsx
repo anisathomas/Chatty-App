@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 
 class ChatBar extends React.Component {
-  makeId() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  // makeId() {
+  //   var text = "";
+  //   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for (var i = 0; i < 4; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  //   for (var i = 0; i < 4; i++)
+  //     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    return text;
-  }
+  //   return text;
+  // }
 
   handleKeyPress = (event) => {
     if (event.key == 'Enter') {
-      this.props.addMessage(
+      this.props.sendMessage(
         {
-          id: this.makeId(),
+          // id: this.uuidv4(),
           type: "incomingMessage",
           username: this.props.name,
           content: event.target.value
@@ -34,11 +34,8 @@ class ChatBar extends React.Component {
   }
 }
 
-
-//use index when render instead of makeId
 export default ChatBar;
 
-//should change makeId to increment consecutively after 4 instead of being randomly generated
 
 
 
