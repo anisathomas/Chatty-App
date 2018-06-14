@@ -3,13 +3,13 @@ import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 
-//Parent
+//Parent Component
 class App extends Component {
 
   constructor() {
     super();
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Bob"},
       messages: [
         {
           id: 1,
@@ -34,11 +34,6 @@ class App extends Component {
   }
 
 
-  //send messages as strings
-  // myWebSocket.onopen = function (event) {
-  //   myWebSocket.send("Here's some text that the server is urgently awaiting!");
-  // };
-
   componentDidMount() {
     console.log("componentDidMount <App />");
     setTimeout(() => {
@@ -50,9 +45,9 @@ class App extends Component {
       // Calling setState will trigger a call to render() in App and all child components.
       this.setState({messages: messages})
     }, 3000);
+
     //websocket connection object
     this.myWebSocket = new WebSocket("ws:localhost:3001");
-
 
     console.log('Connected to server');
   }
@@ -61,6 +56,14 @@ class App extends Component {
     let newMessageList = this.state.messages;
     newMessageList.push(incomingMessage);
     this.setState({messages: newMessageList});
+  }
+
+  //this function sends the message that the user types in to the server
+  sendMessage = (message) => {
+    console.log('messageObject', message)
+    // Send the msg object as a JSON-formatted string.
+    this.myWebSocket.send(JSON.stringify(message));
+
   }
 
 
@@ -80,7 +83,7 @@ class App extends Component {
        </main>
 
        {/*footer*/}
-       <ChatBar name={this.state.currentUser.name} addMessage={this.addMessage} />
+       <ChatBar name={this.state.currentUser.name} addMessage={this.sendMessage} />
 
        {/*<footer class="chatbar">
           <input class="chatbar-username" placeholder="Your Name (Optional)" />
@@ -94,6 +97,3 @@ class App extends Component {
 
 export default App;
 
-//You will have to store the socket
-// connection object somewhere. One way to do this is to store the object
-// as this.socket in the App component.

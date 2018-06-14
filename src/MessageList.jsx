@@ -21,4 +21,6 @@ class MessageList extends Component {
 export default MessageList;
 
 
+
+
 // i is the index of each message in react and it is unique
