@@ -10,7 +10,8 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: "Anisa"},
-      messages: [] // messages coming from the server will be stored here as they arrive
+      messages: [],
+      clients: 1 // messages coming from the server will be stored here as they arrive
     };
 
     this.addMessage = this.addMessage.bind(this);
@@ -48,11 +49,21 @@ class App extends Component {
           var notification = data;
             this.addNotification(notification);
           break;
+        case "numberClients":
+          var numberOfClients = data.size;
+          this.addNumberOfClients(numberOfClients);
+          break;
         default:
           // show an error in the console if the message type is unknown
           throw new Error("Unknown event type" + data.type);
       }
     };
+  }
+
+  addNumberOfClients = (incomingNumberOfClients) => {
+
+    this.setState({clients: incomingNumberOfClients})
+
   }
 
   addNotification = (incomingNotification) => {
@@ -86,7 +97,10 @@ class App extends Component {
   render() {
     return (
      <div>
-       <nav className="navbar"><a href="/" className="navbar-brand">Chatty</a></nav>
+       <nav className="navbar">
+        <a href="/" className="navbar-brand">Chatty</a>
+        <div className="navbar-clients">{this.state.clients} users online</div>
+        </nav>
        <main className="messages">
           <MessageList messages={this.state.messages}/>
        </main>
