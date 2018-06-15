@@ -6,7 +6,7 @@ class ChatBar extends React.Component {
     if (event.key == 'Enter') {
       this.props.sendMessage(
         {
-          type: "incomingMessage",
+          type: "postMessage",
           username: this.props.name,
           content: event.target.value
         }
@@ -14,36 +14,38 @@ class ChatBar extends React.Component {
     }
   }
 
-//changing the input value
+//when name input changes then trigger updateCurrentUser and sendMessage for notifiaction
   handleNameKeyPress = (event) => {
-    console.log('EVENT', event.target.value);
-    this.props.updateCurrentUser(event.target.value);
+    if (event.key == "Enter") {
+      this.props.updateCurrentUser(event.target.value);
+      console.log('EVENT', event.target.value);
+      this.props.sendMessage(
+        {
+          type: "postNotification",
+          content: `${this.props.name} has changed their name to ${event.target.value}.`
+        }
+      );
+    } else {
+      this.props.updateCurrentUser(event.target.value);
+    }
+
   }
-
-//do later for when people change their name for the notification
-  // changeName = (event) => {
-  //   console.log('EVENT', event.target.value);
-  //   if (event.key == 'Enter') {
-  //     // Actually change the user
-  //   }
-  // }
-
- // put inside input bar onKeyPress={this.changeName}
 
   render() {
     return (
-      <footer className="chatbar">
-        <input className="chatbar-username" placeholder="Your Name" value={this.props.name}
-          onChange={this.handleNameKeyPress} />
-        <input className="chatbar-message" placeholder="Type a message and hit ENTER" onKeyPress={this.handleKeyPress}/>
-      </footer>
+      <div>
+        <footer className="chatbar">
+          <input className="chatbar-username" placeholder="Your Name" value={this.props.name}
+            onKeyPress={this.handleNameKeyPress} />
+          <input className="chatbar-message" placeholder="Type a message and hit ENTER"
+            onKeyPress={this.handleKeyPress} />
+        </footer>
+      </div>
     )
   }
 }
 
 export default ChatBar;
-
-
 
 
 

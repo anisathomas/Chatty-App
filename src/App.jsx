@@ -6,12 +6,13 @@ import MessageList from './MessageList.jsx';
 //Parent Component
 class App extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      currentUser: {name: ""},
+      currentUser: {name: "Anon"},
       messages: [] // messages coming from the server will be stored here as they arrive
     };
+
     this.addMessage = this.addMessage.bind(this);
   }
 
@@ -29,15 +30,35 @@ class App extends Component {
     }, 3000);
 
     //websocket connection object
-    this.myWebSocket = new WebSocket("ws:localhost:3001");
+    this.socket = new WebSocket("ws://localhost:3001");
     console.log('Connected to server');
 
-    //Receiving messages from the server
-    this.myWebSocket.onmessage = (event) => {
-      console.log(event.data)
-      var msg = JSON.parse(event.data);
-       this.addMessage(msg);
-    }
+    this.socket.onmessage = (event) => {
+      console.log(event.data);
+      // The socket event data is encoded as a JSON string.
+      // This line turns it into an object
+      const data = JSON.parse(event.data);
+      switch(data.type) {
+        case "incomingMessage":
+          var msg = data;
+          this.addMessage(msg);
+          break;
+        case "incomingNotification":
+          var notification = data;
+            this.addNotification(notification);
+          break;
+        default:
+          // show an error in the console if the message type is unknown
+          throw new Error("Unknown event type" + data.type);
+      }
+    };
+  }
+
+  addNotification = (incomingNotification) => {
+    let newMessageList = this.state.messages;
+    newMessageList.push(incomingNotification);
+    this.setState({messages: newMessageList})
+
   }
 
   addMessage = (incomingMessage) => {
@@ -46,10 +67,11 @@ class App extends Component {
     this.setState({messages: newMessageList});
   }
 
+
   //sends the message that the user types in to server
   sendMessage = (message) => {
     // Send the msg object as a JSON-formatted string.
-    this.myWebSocket.send(JSON.stringify(message));
+    this.socket.send(JSON.stringify(message));
   }
 
   //func below takes in a newUser ex) "Bob"
@@ -65,22 +87,14 @@ class App extends Component {
        <nav className="navbar"><a href="/" className="navbar-brand">Chatty</a></nav>
        <main className="messages">
           <MessageList messages={this.state.messages}/>
-         <div className="message system">
-          Anonymous1 changed their name to nomnom.
-         </div>
        </main>
-
        <ChatBar name={this.state.currentUser.name} sendMessage={this.sendMessage}
        updateCurrentUser={this.updateCurrentUser} />
-
       </div>
     );
   }
 }
 
 export default App;
-
-
-//need to use the message uuid for the key inside of messagelist component
 
 

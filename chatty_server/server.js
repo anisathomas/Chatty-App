@@ -35,14 +35,29 @@ wss.on('connection', (ws) => {
   ws.on('message', function incoming(data) {
     const message = JSON.parse(data)
     message.id = uuidv4();
-    console.log('id', message.id, 'user', message.username, 'said', message.content);
 
-    //calling the broadcast function
-    wss.broadcast(JSON.stringify(message))
+    if(message.type === 'postMessage'){
+      message.type = 'incomingMessage';
+      //calling the broadcast to all function
+      console.log('id', message.id, 'user', message.username, 'said', message.content);
 
+      wss.broadcast(JSON.stringify(message))
+
+    } else if (message.type === 'postNotification'){
+      // Broadcast to everyone else but self.for the notification
+      message.type = 'incomingNotification';
+      console.log(message.content);
+      wss.clients.forEach(function each(client) {
+        if (client !== ws && client.readyState === SocketServer.OPEN) {
+          client.send(JSON.stringify(message));
+        }
+
+      });
+    } else {
+      console.log("Unable to determine message type");
+    }
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => console.log('Client disconnected'));
 });
-
