@@ -16,8 +16,8 @@ class MessageList extends Component {
 
       } else if (message.type === "incomingNotification") {
         return(
-          <div class="notification">
-            <span class="notification-content">{message.content}</span>
+          <div className="notification">
+            <span className="notification-content">{message.content}</span>
           </div>
         );
 

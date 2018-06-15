@@ -36,17 +36,15 @@ wss.on('connection', (ws) => {
     const message = JSON.parse(data)
     message.id = uuidv4();
 
-    console.log(message)
-
     if(message.type === 'postMessage'){
       message.type = 'incomingMessage';
-      //calling the broadcast to all function
-      console.log('id', message.id, 'user', message.username, 'said', message.content);
 
+      console.log('id', message.id, 'user', message.username, 'said', message.content);
+      //calling the broadcast to all function
       wss.broadcast(JSON.stringify(message))
 
     } else if (message.type === 'postNotification'){
-      // Broadcast to everyone else but self.for the notification
+     //broadcast notifaction
       message.type = 'incomingNotification';
       console.log(message.content);
       wss.broadcast(JSON.stringify(message))

@@ -16,7 +16,6 @@ class ChatBar extends React.Component {
 
 //when name input changes then trigger updateCurrentUser and sendMessage for notifiaction
   handleNameKeyPress = (event) => {
-    if (event.key == "Enter") {
       this.props.updateCurrentUser(event.target.value);
       console.log('EVENT', event.target.value);
       this.props.sendMessage(
@@ -25,7 +24,6 @@ class ChatBar extends React.Component {
           content: `${this.props.name} has changed their name to ${event.target.value}.`
         }
       );
-    }
 
   }
 
@@ -34,7 +32,7 @@ class ChatBar extends React.Component {
       <div>
         <footer className="chatbar">
           <input className="chatbar-username" placeholder="Your Name" defaultValue={this.props.name}
-            onKeyPress={this.handleNameKeyPress} />
+            onBlur={this.handleNameKeyPress} />
           <input className="chatbar-message" placeholder="Type a message and hit ENTER"
             onKeyPress={this.handleKeyPress} />
         </footer>
@@ -44,7 +42,6 @@ class ChatBar extends React.Component {
 }
 
 export default ChatBar;
-
 
 
 
