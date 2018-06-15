@@ -36,6 +36,8 @@ wss.on('connection', (ws) => {
     const message = JSON.parse(data)
     message.id = uuidv4();
 
+    console.log(message)
+
     if(message.type === 'postMessage'){
       message.type = 'incomingMessage';
       //calling the broadcast to all function
@@ -47,12 +49,7 @@ wss.on('connection', (ws) => {
       // Broadcast to everyone else but self.for the notification
       message.type = 'incomingNotification';
       console.log(message.content);
-      wss.clients.forEach(function each(client) {
-        if (client !== ws && client.readyState === SocketServer.OPEN) {
-          client.send(JSON.stringify(message));
-        }
-
-      });
+      wss.broadcast(JSON.stringify(message))
     } else {
       console.log("Unable to determine message type");
     }

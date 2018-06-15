@@ -38,6 +38,7 @@ class App extends Component {
       // The socket event data is encoded as a JSON string.
       // This line turns it into an object
       const data = JSON.parse(event.data);
+
       switch(data.type) {
         case "incomingMessage":
           var msg = data;
@@ -55,6 +56,7 @@ class App extends Component {
   }
 
   addNotification = (incomingNotification) => {
+    console.log(incomingNotification)
     let newMessageList = this.state.messages;
     newMessageList.push(incomingNotification);
     this.setState({messages: newMessageList})

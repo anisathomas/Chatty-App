@@ -25,8 +25,6 @@ class ChatBar extends React.Component {
           content: `${this.props.name} has changed their name to ${event.target.value}.`
         }
       );
-    } else {
-      this.props.updateCurrentUser(event.target.value);
     }
 
   }
@@ -35,7 +33,7 @@ class ChatBar extends React.Component {
     return (
       <div>
         <footer className="chatbar">
-          <input className="chatbar-username" placeholder="Your Name" value={this.props.name}
+          <input className="chatbar-username" placeholder="Your Name" defaultValue={this.props.name}
             onKeyPress={this.handleNameKeyPress} />
           <input className="chatbar-message" placeholder="Type a message and hit ENTER"
             onKeyPress={this.handleKeyPress} />
