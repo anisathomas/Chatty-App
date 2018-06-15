@@ -4,8 +4,6 @@ const express = require('express');
 const SocketServer = require('ws');
 const uuidv4 = require('uuid/v4');
 
-
-
 // Set the port to 3001
 const PORT = 3001;
 
@@ -18,7 +16,7 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer.Server({ server });
 
-//Broadcast to all.
+//Broadcast incoming messages to all.
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
     if (client.readyState === SocketServer.OPEN) {

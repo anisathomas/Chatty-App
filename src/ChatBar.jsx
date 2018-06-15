@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
 
 class ChatBar extends React.Component {
-  // makeId() {
-  //   var text = "";
-  //   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  //   for (var i = 0; i < 4; i++)
-  //     text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  //   return text;
-  // }
-
+  //state:  {}
   handleKeyPress = (event) => {
     if (event.key == 'Enter') {
       this.props.sendMessage(
         {
-          // id: this.uuidv4(),
           type: "incomingMessage",
           username: this.props.name,
           content: event.target.value
@@ -24,10 +14,27 @@ class ChatBar extends React.Component {
     }
   }
 
+//changing the input value
+  handleNameKeyPress = (event) => {
+    console.log('EVENT', event.target.value);
+    this.props.updateCurrentUser(event.target.value);
+  }
+
+//do later for when people change their name for the notification
+  // changeName = (event) => {
+  //   console.log('EVENT', event.target.value);
+  //   if (event.key == 'Enter') {
+  //     // Actually change the user
+  //   }
+  // }
+
+ // put inside input bar onKeyPress={this.changeName}
+
   render() {
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" placeholder="Your Name" defaultValue={this.props.name} />
+        <input className="chatbar-username" placeholder="Your Name" value={this.props.name}
+          onChange={this.handleNameKeyPress} />
         <input className="chatbar-message" placeholder="Type a message and hit ENTER" onKeyPress={this.handleKeyPress}/>
       </footer>
     )

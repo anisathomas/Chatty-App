@@ -9,7 +9,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      currentUser: {name: "Bob"},
+      currentUser: {name: ""},
       messages: [] // messages coming from the server will be stored here as they arrive
     };
     this.addMessage = this.addMessage.bind(this);
@@ -46,14 +46,18 @@ class App extends Component {
     this.setState({messages: newMessageList});
   }
 
-  //this function sends the message that the user types in to the server
+  //sends the message that the user types in to server
   sendMessage = (message) => {
-    //console.log('messageObject', message)
     // Send the msg object as a JSON-formatted string.
     this.myWebSocket.send(JSON.stringify(message));
-
   }
 
+  //func below takes in a newUser ex) "Bob"
+  updateCurrentUser = (name) => {
+    let newCurrentUser = this.state.currentUser;
+    newCurrentUser.name = name
+    this.setState({currentUser: newCurrentUser});
+  }
 
   render() {
     return (
@@ -66,7 +70,8 @@ class App extends Component {
          </div>
        </main>
 
-       <ChatBar name={this.state.currentUser.name} sendMessage={this.sendMessage} />
+       <ChatBar name={this.state.currentUser.name} sendMessage={this.sendMessage}
+       updateCurrentUser={this.updateCurrentUser} />
 
       </div>
     );
