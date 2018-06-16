@@ -16,7 +16,7 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer.Server({ server });
 
-//Broadcast incoming messages to all.
+//Broadcast incoming messages to all function.
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
     if (client.readyState === SocketServer.OPEN) {
