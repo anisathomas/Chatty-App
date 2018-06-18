@@ -68,7 +68,6 @@ class App extends Component {
   }
 
   addNotification = (incomingNotification) => {
-    console.log(incomingNotification)
     let newMessageList = this.state.messages;
     newMessageList.push(incomingNotification);
     this.setState({messages: newMessageList})

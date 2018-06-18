@@ -16,7 +16,7 @@ class MessageList extends Component {
 
       } else if (message.type === "incomingNotification") {
         return(
-          <div className="notification">
+          <div className="notification" key={i}>
             <span className="notification-content">{message.content}</span>
           </div>
         );
@@ -35,5 +35,3 @@ class MessageList extends Component {
 }
 
 export default MessageList;
-
-// i is the index of each message in react and it is unique
